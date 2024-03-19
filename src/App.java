@@ -1,11 +1,13 @@
+
+import com.util.DBConn;
+import domain.EmpVO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Random;
-import com.util.DBConn;
-import domain.EmpVO;
 
 public class App {
 
@@ -93,7 +95,6 @@ public class App {
                 updateColumn[i] = br.readLine();
             }
 
-
             for (int i = 0; i < updateColumn.length; i++) {
                 if ( updateColumn[i].isEmpty() ) {
                     sql = String.format("SELECT %s FROM emp WHERE empno = ? ", columnName[i]);
@@ -120,12 +121,10 @@ public class App {
             sql = sql.substring(0,sql.length()-2);
             sql += "WHERE empno = " + empno;
 
-
             pstmt = conn.prepareStatement(sql);
 
             rowCount = pstmt.executeUpdate();
             System.out.println(rowCount + "행의 정보가 수정되었습니다.");
-
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
