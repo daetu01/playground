@@ -1,5 +1,6 @@
 package persistence;
 
+import com.util.DBConn;
 import persistence.EmpDAO;
 import persistence.EmpDAOImpl;
 
@@ -9,7 +10,8 @@ public class App {
     static int selectNum;
 
     public static void main(String[] args) throws IOException {
-        EmpDAOImpl empDAO = new EmpDAOImpl();
+        Connection conn  = DBConn.getConnection();
+        EmpDAOImpl empDAO = new EmpDAOImpl(conn);
         printMenu();
         selectedMenu();
         runMenu(empDAO);

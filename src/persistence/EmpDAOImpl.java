@@ -12,6 +12,13 @@ import java.util.Random;
 
 public class EmpDAOImpl implements EmpDAO{
     static Connection conn = null;
+
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+    public EmpDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
     @Override
     public ArrayList<EmpVO> getEmplSelect() {
         return null;
