@@ -2,6 +2,8 @@ package persistence;
 
 import domain.EmpVO;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface EmpDAO {
@@ -11,10 +13,16 @@ public interface EmpDAO {
     public abstract ArrayList<EmpVO> getEmplSelect() ;
 
     // 2. 사원 추가 추상메서드
+    void pSettingMenu() throws IOException;
+
+    int pause();
+
+    void insertempList(ArrayList empList);
+    // 3. 사원 자동 생성 메서드
     int addEmp(EmpVO vo) ;
 
     // 3. 사원 수정
-    int updateEmp(EmpVO vo) ;
+    void editEmp() throws IOException ;
 
     // 4. 사원 삭제
     int deleteEmp(int empno) ;
@@ -26,4 +34,6 @@ public interface EmpDAO {
 
     // 6. 한 사원 정보
     EmpVO getEmp(int empno) ;
+
+    ArrayList<EmpVO> makePerson(int k);
 }
