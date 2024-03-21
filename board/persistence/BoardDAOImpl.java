@@ -28,7 +28,7 @@ public class BoardDAOImpl implements BoardDAO{
 
     @Override
     public ArrayList<BoardDTO> select() throws SQLException {
-        ArrayList<BoardDTO> boardList = null;
+        ArrayList<BoardDTO> boardList = new ArrayList<>();
         ResultSet resultSet = null;
         BoardDTO dto = null;
         conn = DBConn.getConnection();

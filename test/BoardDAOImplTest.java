@@ -9,9 +9,8 @@ import java.util.ArrayList;
 
 public class BoardDAOImplTest {
 
-
     @Test
-    void test () throws SQLException {
+    public void test() throws SQLException {
         Connection conn = DBConn.getConnection();
         BoardDAOImpl dao = new BoardDAOImpl(conn);
         ArrayList<BoardDTO> list = dao.select();

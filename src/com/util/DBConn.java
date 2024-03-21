@@ -8,10 +8,6 @@ public class DBConn {
 
     private static Connection conn = null;
 
-    private DBConn () {
-
-    }
-
     public static Connection getConnection() {
         if ( conn == null ) {
             String className = "oracle.jdbc.driver.OracleDriver";
