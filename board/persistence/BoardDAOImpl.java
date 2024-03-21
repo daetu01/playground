@@ -90,4 +90,30 @@ public class BoardDAOImpl implements BoardDAO{
         return rowCount;
     }
 
+    public BoardDTO view (long seq) {
+        BoardDTO dto = null;
+        ResultSet resultSet = null;
+        String sql = "SELECT seq, writer, title, writedate, readed, tag, content " +
+                "FROM TBL_CSTVSBOARD " +
+                "WHERE seq = ? ";
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1,seq);
+            pstmt.executeQuery();
+
+            dto = new BoardDTO().builder()
+                    .seq(seq);
+                    .build();
+
+
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        }
+
+
+
+        return dto;
+    }
+
 }
