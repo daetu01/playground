@@ -64,8 +64,30 @@ public class BoardDAOImpl implements BoardDAO{
     }
 
     @Override
-    public int insert(BoardDTO dto) throws SQLException {
-        return 0;
+    public int insert(BoardDTO dto) {
+        int rowCount = 0 ;
+        String sql = "INSERT INTO TBL_CSTVSBOARD " +
+                "(seq,writer,pwd,email,title,tag,content) " +
+                "VALUES (SEQ_TBL_CSTVBOARD.NEXTVAL , ?, ?, ?, ?, ?, ?)" ;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,dto.getWriter());
+            pstmt.setString(2,dto.getPwd());
+            pstmt.setString(3, dto.getEmail());
+            pstmt.setString(4, dto.getTitle());
+            pstmt.setInt(5, dto.getTag());
+            pstmt.setString(6,dto.getContent());
+            rowCount = pstmt.executeUpdate();
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            try {
+                pstmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return rowCount;
     }
 
 }
