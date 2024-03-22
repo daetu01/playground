@@ -4,10 +4,11 @@ import persistence.BoardDAO;
 import persistence.BoardDAOImpl;
 import service.BoardService;
 
+import java.io.IOException;
 import java.sql.Connection;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Connection connection = DBConn.getConnection();
         BoardDAO dao = new BoardDAOImpl(connection);
         BoardService service = new BoardService(dao);

@@ -1,7 +1,10 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -27,7 +30,7 @@ public class BoardController {
     }
 
     // 게시판 기능을 사용...
-    public void boardStart() {
+    public void boardStart() throws IOException {
         while ( true ) {
             메뉴출력() ;
             메뉴선택() ;
@@ -67,7 +70,7 @@ public class BoardController {
         System.exit(-1);
     }
 
-    private void 메뉴처리() {
+    private void 메뉴처리() throws IOException {
         switch (this.selectedNumber) {
             case 1:// 새글
                 새글쓰기();
@@ -99,18 +102,47 @@ public class BoardController {
 
     }
 
-    private void 삭제하기() {
-        // TODO Auto-generated method stub
+    private void 삭제하기() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        long seq = Long.parseLong(br.readLine());
+        int rowCount = service.deleteService(seq);
+
+        if ( rowCount == 1 ) {
+            System.out.println("삭제에 성공하였습니다. ");
+        }
 
     }
 
     private void 수정하기() {
-        // TODO Auto-generated method stub
+
 
     }
 
-    private void 상세보기() {
-        // TODO Auto-generated method stub
+    private void 상세보기() throws IOException {
+        System.out.println("조회할 페이지 번호를 입력하세요 ");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BoardDTO boardDTO = service.viewService(Long.parseLong(br.readLine()));
+
+        if (boardDTO == null) {
+            System.out.println("조회된 게시글이 없습니다. ");
+        } else {
+            long seq = boardDTO.getSeq();
+            String title = boardDTO.getTitle();
+            String email = boardDTO.getEmail();
+            Date date =boardDTO.getWritedate();
+            String writer = boardDTO.getWriter();
+            int readed = boardDTO.getReaded();
+            String contents = boardDTO.getContent();
+
+            System.out.println(seq);
+            System.out.println(title);
+            System.out.println(email);
+            System.out.println(date);
+            System.out.println(writer);
+            System.out.println(readed);
+            System.out.println(contents);
+
+        }
 
     }
 

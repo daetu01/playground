@@ -37,4 +37,15 @@ public class BoardServiceTest {
             System.out.println("작성에 성공하였습니다. ");
         }
     }
+
+    @Test
+    void deleteTest() throws SQLException {
+        Connection conn = DBConn.getConnection();
+        BoardDAOImpl dao = new BoardDAOImpl(conn);
+        BoardService service = new BoardService(dao);
+        int rowCount = service.deleteService(19);
+        if (rowCount == 1) {
+            System.out.println("삭제에 성공하였습니다. ");
+        }
+    }
 }

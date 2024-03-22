@@ -93,27 +93,63 @@ public class BoardDAOImpl implements BoardDAO{
     public BoardDTO view (long seq) {
         BoardDTO dto = null;
         ResultSet resultSet = null;
-        String sql = "SELECT seq, writer, title, writedate, readed, tag, content " +
+        String sql = "SELECT seq, writer, email,title, writedate, readed, tag, content " +
                 "FROM TBL_CSTVSBOARD " +
                 "WHERE seq = ? ";
 
         try {
             pstmt = conn.prepareStatement(sql);
             pstmt.setLong(1,seq);
-            pstmt.executeQuery();
+            resultSet = pstmt.executeQuery();
 
-            dto = new BoardDTO().builder()
-                    .seq(seq);
-                    .build();
-
-
+            if ( resultSet.next()) {
+                dto = new BoardDTO().builder()
+                        .seq(resultSet.getLong("seq"))
+                        .writer(resultSet.getString("writer"))
+                        .email(resultSet.getString("email"))
+                        .title(resultSet.getString("title"))
+                        .writedate(resultSet.getDate("writedate"))
+                        .readed(resultSet.getInt("readed"))
+                        .tag(resultSet.getInt("tag"))
+                        .content(resultSet.getString("content"))
+                        .build();
+            }
         } catch (SQLException e ) {
             e.printStackTrace();
         }
-
-
-
         return dto;
     }
+
+    public int increaseReaded(long seq) {
+        int rowCount = 0;
+        String sql = "UPDATE TBL_CSTVSBOARD " +
+                "SET readed = readed + 1 " +
+                "WHERE seq = ?";
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1,seq);
+            rowCount = pstmt.executeUpdate();
+        } catch (SQLException e ) {
+            e.printStackTrace(); // increasedreaded sql 예외 처리 구문
+        }
+        return rowCount;
+    }
+
+    @Override
+    public int delete(long seq) {
+        int rowCount = 0;
+        String sql = "DELETE FROM TBL_CSTVSBOARD " +
+                "WHERE seq = ? ";
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1,seq);
+            rowCount = pstmt.executeUpdate();
+        } catch (SQLException e) {
+
+        }
+        return rowCount;
+    }
+
+
 
 }

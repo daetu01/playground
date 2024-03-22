@@ -14,4 +14,10 @@ public interface BoardDAO {
 
     // 게시글 쓰기
     int insert(BoardDTO dto);
+
+    BoardDTO view (long seq);
+
+    int increaseReaded(long seq);
+
+    int delete(long seq);
 }
