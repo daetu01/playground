@@ -3,10 +3,7 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 import com.util.DBConn;
 import domain.BoardDTO;
@@ -97,8 +94,38 @@ public class BoardController {
         일시정지();
     }
 
-    private void 검색하기() {
-        // TODO Auto-generated method stub
+    private void 검색하기() throws IOException {
+        ArrayList<BoardDTO> boardDTOS = null;
+        BoardDTO dto = null;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println(
+                "> 검색 조건 : 제목(1) , 내용(2), 작성자(3), 제목+내용(4) 선택  ? ");
+        int searchType = Integer.parseInt(br.readLine());
+        System.out.println("> 검색어 입력 ? ");
+        String searchWord = br.readLine();
+
+        boardDTOS = service.searchService(searchType,searchWord);
+
+        if (boardDTOS != null) {
+        Iterator <BoardDTO> ir = boardDTOS.iterator();
+
+        System.out.println("\t\t\t  게시판");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("%s\t%-40s\t%s\t%-10s\t%s\n",
+                "글번호","글제목","글쓴이","작성일","조회수");
+        while (ir.hasNext()) {
+            dto = ir.next();
+            System.out.printf("%d\t%-30s  %s\t%-10s\t%d\n",
+                    dto.getSeq(),
+                    dto.getTitle(),
+                    dto.getWriter(),
+                    dto.getWritedate(),
+                    dto.getReaded());
+        }
+        System.out.println("-------------------------------------------------------------------------");
+        } else {
+            System.out.println("검색하신 결과가 없습니다. ");
+        }
 
     }
 
@@ -113,9 +140,47 @@ public class BoardController {
 
     }
 
-    private void 수정하기() {
+    private void 수정하기() throws IOException {
+        BoardDTO dto = null;
+        System.out.println("수정할 글번호와 비밀번호를 입력하세요 .");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        long seq = Long.parseLong(st.nextToken());
 
+        dto = service.viewService(seq,st.nextToken());
 
+        if (dto != null) {
+            String title = dto.getTitle();
+            String email = dto.getEmail();
+            Date date =dto.getWritedate();
+            String writer = dto.getWriter();
+            int readed = dto.getReaded();
+            String contents = dto.getContent();
+
+            System.out.println(seq);
+            System.out.println(title);
+            System.out.println(email);
+            System.out.println(date);
+            System.out.println(writer);
+            System.out.println(readed);
+            System.out.println(contents);
+
+            System.out.println("수정할 제목, 이메일, 내용, 태그를 입력하세요 . ");
+            st = new StringTokenizer(br.readLine());
+            dto.setSeq(seq);
+            dto.setTitle(st.nextToken()) ;
+            dto.setEmail(st.nextToken());
+            dto.setContent(st.nextToken());
+            dto.setTag(Integer.parseInt(st.nextToken()));
+
+            int rowCount = service.updateService(dto);
+
+            if ( rowCount == 1 ) {
+                System.out.println("수정 완료");
+            }
+        } else {
+            System.out.println("유효하지 않은 비밀번호입니다. ");
+        }
     }
 
     private void 상세보기() throws IOException {
@@ -149,14 +214,16 @@ public class BoardController {
     // 페이징 처리 마지막에 함.
 
     // 페이징 처리 필요한 필드 선언.
+    private int numberOfPageBlock = 10;
     private int currentPage = 1;
+    private int numberPerpage = 10;
 
     private void 목록보기() {
 
         System.out.println("> 현재 페이지번호를 입력 ? ");
         this.currentPage = this.scanner.nextInt();
 
-        ArrayList<BoardDTO> list = this.service.selectService();
+        ArrayList<BoardDTO> list = this.service.selectService(currentPage,numberPerpage);
 
         // 뷰(View)-출력담당
         System.out.println("\t\t\t  게시판");
@@ -180,8 +247,8 @@ public class BoardController {
             } // while
         }
         System.out.println("-------------------------------------------------------------------------");
-        System.out.println("\t\t\t [1] 2 3 4 5 6 7 8 9 10 >");
-
+        System.out.println(this.service.pageService(this.currentPage, this.numberPerpage,this.numberOfPageBlock));
+        System.out.println("-------------------------------------------------------------------------");
 
     }
 
@@ -217,3 +284,7 @@ public class BoardController {
 
 
 }
+
+
+
+
